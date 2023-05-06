@@ -10,7 +10,7 @@ REVISION =    0
 HOMEPAGE =    https://github.com/muktadiur/blockor
 MAINTAINER =  Muktadiur Rahman <muktadiur@gmail.com>
 
-# MIT
+# BSD3CLAUSE
 PERMIT_PACKAGE = Yes
 
 GH_ACCOUNT =   muktadiur
@@ -26,8 +26,32 @@ NO_BUILD=	Yes
 NO_TEST=	Yes
 
 
+# Define paths
+PREFIX=		/usr/local
+BIN_DIR=	${PREFIX}/bin
+LIBEXECDIR=	${PREFIX}/libexec
+ETCDIR=		${PREFIX}/share/examples/blockor
+DATADIR=	${PREFIX}/share/blockor
+
+# Installation commands
 do-install:
-	make install
+	${INSTALL_SCRIPT} ${WRKSRC}/${PREFIX}/bin/blockor ${PREFIX}/bin
+	${INSTALL_MAN} ${WRKSRC}/openbsd/${PREFIX}/man/blockor.8 ${PREFIX}/man/man8/
+	${INSTALL_DATA_DIR} ${ETCDIR}
+	${INSTALL_DATA_DIR} ${DATADIR}
+	${INSTALL_DATA} ${WRKSRC}/openbsd/${PREFIX}/examples/blockor/blockor.conf.sample \
+		${ETCDIR}/blockor.conf.sample
+	${INSTALL_DATA} ${WRKSRC}/openbsd/${PREFIX}/etc/blockor.conf \
+		${ETCDIR}/blockor.conf
+	${INSTALL_SCRIPT} ${WRKSRC}/${PREFIX}/libexec/blockor/blockord.sh \
+		${LIBEXECDIR}/blockor/blockord.sh
+
+# Enable daemon control
+RC_SCRIPTS=	blockord
+SUBST_VARS+=	BIN_DIR LIBEXECDIR ETCDIR DATADIR
+
+# do-install:
+# 	make install
 
 .include       <bsd.port.mk>
 
