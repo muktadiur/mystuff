@@ -29,29 +29,22 @@ NO_TEST=	Yes
 # Define paths
 PREFIX=		/usr/local
 BIN_DIR=	${PREFIX}/bin
-LIBEXECDIR=	${PREFIX}/libexec
-ETCDIR=		${PREFIX}/share/examples/blockor
-DATADIR=	${PREFIX}/share/blockor
+LIBEXECDIR=	${PREFIX}/libexec/blockor
+EXAMPLEDIR=	${PREFIX}/share/examples/blockor
 
-# Installation commands
 do-install:
-	${INSTALL_SCRIPT} ${WRKSRC}/${PREFIX}/bin/blockor ${PREFIX}/bin
-	${INSTALL_MAN} ${WRKSRC}/openbsd/${PREFIX}/man/blockor.8 ${PREFIX}/man/man8/
-	${INSTALL_DATA_DIR} ${ETCDIR}
-	${INSTALL_DATA_DIR} ${DATADIR}
-	${INSTALL_DATA} ${WRKSRC}/openbsd/${PREFIX}/examples/blockor/blockor.conf.sample \
-		${ETCDIR}/blockor.conf.sample
-	${INSTALL_DATA} ${WRKSRC}/openbsd/${PREFIX}/etc/blockor.conf \
-		${ETCDIR}/blockor.conf
-	${INSTALL_SCRIPT} ${WRKSRC}/${PREFIX}/libexec/blockor/blockord.sh \
-		${LIBEXECDIR}/blockor/blockord.sh
+	${INSTALL_DATA_DIR} ${LIBEXECDIR}
+	${INSTALL_DATA_DIR} ${EXAMPLEDIR}
+	${INSTALL_SCRIPT} ${WRKSRC}${BIN_DIR}/blockor ${BIN_DIR}
+	${INSTALL_MAN} ${WRKSRC}/openbsd${PREFIX}/man/blockor.8.gz ${PREFIX}/man/blockor.8.gz
+	${INSTALL_DATA} ${WRKSRC}/openbsd${PREFIX}/etc/blockor.conf ${PREFIX}/etc/blockor.conf
+	${INSTALL_SCRIPT} ${WRKSRC}${LIBEXECDIR}/blockord.sh ${LIBEXECDIR}/blockord.sh
+	${INSTALL_DATA} ${WRKSRC}/openbsd${EXAMPLEDIR}/blockor.example.conf \
+		${EXAMPLEDIR}/blockor.example.conf
 
 # Enable daemon control
 RC_SCRIPTS=	blockord
-SUBST_VARS+=	BIN_DIR LIBEXECDIR ETCDIR DATADIR
-
-# do-install:
-# 	make install
+SUBST_VARS+=	BIN_DIR LIBEXECDIR EXAMPLEDIR
 
 .include       <bsd.port.mk>
 
